@@ -1,0 +1,19 @@
+<form action="{% url 'logout' %}" method="post">
+  {% csrf_token %}
+  <button type="submit">logout</button>
+</form>
+<h1>My to do list</h1>
+
+<form action="" method="get">
+  <input type="text" name="search_area" value="{{ search_input }}" />
+  <input type="submit" value="search" />
+</form>
+
+<a href="{% url 'task_create' %}">add</a>
+<ul>
+  {% for task in tasks %}
+  <li>{{ task.title }}</li>
+  <a href="{% url 'task_update' task.id %}">Edit</a>
+  <a href="{% url 'task_delete' task.id %}">delete</a>
+  {% endfor %}
+</ul>

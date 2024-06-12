@@ -1,19 +1,55 @@
-<form action="{% url 'logout' %}" method="post">
-  {% csrf_token %}
-  <button type="submit">logout</button>
-</form>
-<h1>My to do list</h1>
+{% extends 'main/_base.html' %} 
+{% block content %}
+{% load static %}
+
+
+<div class="row">
+  <div class="col">
+    <img id="logo" src="{% static 'images/icon.svg' %}" alt="" />
+  </div>
+  <div class="col">
+    <h3>{{ request.user }} To Do List</h3>
+  </div>
+  <div class="col">
+    <form action="{% url 'logout' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" id="logout" class="btn btn-warning">Logout</button>
+    </form>
+  </div>
+</div>
 
 <form action="" method="get">
-  <input type="text" name="search_area" value="{{ search_input }}" />
-  <input type="submit" value="search" />
+<div id="search" class="input-group mb-3">
+  <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2"  name="search_area" value="{{ search_input }}">
+  <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+</div>
 </form>
 
-<a href="{% url 'task_create' %}">add</a>
-<ul>
-  {% for task in tasks %}
-  <li>{{ task.title }}</li>
-  <a href="{% url 'task_update' task.id %}">Edit</a>
-  <a href="{% url 'task_delete' task.id %}">delete</a>
-  {% endfor %}
+<ul class="list-group">
+    {% for task in tasks %}
+    {% if task.complete %}
+    <li class="list-group-item list-group-item-success">{{ task.title }}
+    <span class="modify">
+    <a  class="badge text-bg-light" href="{% url 'task_update' task.id %}">Edit</a>
+    <a class="badge text-bg-danger" href="{% url 'task_delete' task.id %}">delete</a>
+    </span>
+    </li>
+
+    {% else %}
+    <li class="list-group-item">
+      {{ task.title }}
+      <span class="modify" >
+      <a  class="badge text-bg-light" href="{% url 'task_update' task.id %}">Edit</a>
+      <a class="badge text-bg-danger" href="{% url 'task_delete' task.id %}">delete</a>
+    </span>
+    </li>
+    {% endif %}
+
+    {% empty %}
+    <h3>No new tasks are created.</h3>
+    {% endfor %}
 </ul>
+
+<a id="add" class="btn btn-success" href="{% url 'task_create' %}">Add a new task</a>
+
+{% endblock content %}
